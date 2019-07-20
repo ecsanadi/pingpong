@@ -63,4 +63,43 @@ void MainWindow::centerAndResize() {
     );
 }
 
+void MainWindow::leftRackUp()
+{
+    myGameBoard->leftRackMove(UP);
+}
 
+void MainWindow::leftRackDown()
+{
+    myGameBoard->leftRackMove(DOWN);
+}
+
+void MainWindow::rightRackUp()
+{
+    myGameBoard->rightRackMove(UP);
+}
+
+void MainWindow::rightRackDown()
+{
+    myGameBoard->rightRackMove(DOWN);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    if( event->key() == Qt::Key_W )
+    {
+        emit leftRackUp(); // connected elsewhere
+    }
+    else if (event->key() == Qt::Key_S)
+    {
+        emit leftRackDown();
+    }
+    else if (event->key() == Qt::Key_O)
+    {
+        emit rightRackUp();
+    }
+    else if(event->key() == Qt::Key_L)
+    {
+        emit rightRackDown();
+    }
+
+}

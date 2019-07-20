@@ -12,11 +12,19 @@ void GameBoardWidget::updateGameBoard()
     update();
 }
 
-void GameBoardWidget::leftRackMove()
-{}
+void GameBoardWidget::leftRackMove(int iDirection)
+{
+    mLeftRack.mY1 += iDirection;
+    mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+    update();
+}
 
-void GameBoardWidget::rightRackMove()
-{}
+void GameBoardWidget::rightRackMove(int iDirection)
+{
+    mRightRack.mY1 += iDirection;
+    mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+    update();
+}
 
 void GameBoardWidget::setRacks(QSize iSize)
 {

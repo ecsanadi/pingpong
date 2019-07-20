@@ -19,8 +19,8 @@ public:
 
 public slots:
     void updateGameBoard();
-    void leftRackMove();
-    void rightRackMove();
+    void leftRackMove(int iDirection);
+    void rightRackMove(int iDirection);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
