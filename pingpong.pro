@@ -26,11 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    gameboardwidget.cpp
+    gameboardwidget.cpp \
+    line.cpp \
+    point.cpp
 
 HEADERS += \
         mainwindow.h \
-    gameboardwidget.h
+    gameboardwidget.h \
+    line.h \
+    point.h
 
 FORMS += \
         mainwindow.ui

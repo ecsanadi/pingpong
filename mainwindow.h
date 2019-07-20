@@ -19,6 +19,7 @@ public:
 private:
    GameBoardWidget *myGameBoard;
    QPushButton *m_button_new;
+   void centerAndResize();
 
 private slots:
     void buttonNewGame();
