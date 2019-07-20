@@ -15,7 +15,7 @@ public:
     }
 
     ~GameBoardWidget();
-    void setRacks(QSize iSize);
+    void init(QSize iSize);
 
 public slots:
     void updateGameBoard();
@@ -31,6 +31,7 @@ private:
     int mRackPenSize;
     int mRackLength;
     Point mBall;
+    QSize mSize;
 };
 
 #endif // GAMEBOARDWIDGET_H

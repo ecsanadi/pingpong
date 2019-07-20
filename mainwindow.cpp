@@ -51,7 +51,7 @@ void MainWindow::centerAndResize() {
     qDebug() << "Computed dimensions " << width << "x" << height;
     QSize newSize( width, height );
 
-    myGameBoard->setRacks(newSize);
+    myGameBoard->init(newSize);
 
     setGeometry(
         QStyle::alignedRect(
@@ -89,15 +89,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
         emit leftRackUp(); // connected elsewhere
     }
-    else if (event->key() == Qt::Key_S)
+    if (event->key() == Qt::Key_S)
     {
         emit leftRackDown();
     }
-    else if (event->key() == Qt::Key_O)
+    if (event->key() == Qt::Key_O)
     {
         emit rightRackUp();
     }
-    else if(event->key() == Qt::Key_L)
+    if(event->key() == Qt::Key_L)
     {
         emit rightRackDown();
     }

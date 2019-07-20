@@ -14,24 +14,33 @@ void GameBoardWidget::updateGameBoard()
 
 void GameBoardWidget::leftRackMove(int iDirection)
 {
-    mLeftRack.mY1 += iDirection;
-    mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+    if ((mLeftRack.mY1 + iDirection) >= 0 && (mLeftRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
+    {
+        mLeftRack.mY1 += iDirection;
+        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+    }
+
     update();
 }
 
 void GameBoardWidget::rightRackMove(int iDirection)
 {
-    mRightRack.mY1 += iDirection;
-    mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+    if ((mRightRack.mY1 + iDirection) >= 0 && (mRightRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
+    {
+        mRightRack.mY1 += iDirection;
+        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+    }
+
     update();
 }
 
-void GameBoardWidget::setRacks(QSize iSize)
+void GameBoardWidget::init(QSize iSize)
 {
+    mSize = iSize;
     mRackPenSize = 20;
     mRackLength = 90;
 
-    mRightRack.mX1 = iSize.width() - (mRackPenSize * 2) + 5;
+    mRightRack.mX1 = mSize.width() - (mRackPenSize * 2) + 5;
     mRightRack.mY1 = 1;
     mRightRack.mX2 = mRightRack.mX1;
     mRightRack.mY2 = mRightRack.mY1 + mRackLength;
