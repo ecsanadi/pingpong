@@ -17,6 +17,11 @@ public:
     ~GameBoardWidget();
     void init(QSize iSize);
 
+    Line mRightRack;
+    Line mLeftRack;
+
+    void checkPositions();
+
 public slots:
     void updateGameBoard();
     void leftRackMove(int iDirection);
@@ -26,8 +31,6 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    Line mRightRack;
-    Line mLeftRack;
     int mRackPenSize;
     int mRackLength;
     Point mBall;

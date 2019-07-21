@@ -8,6 +8,10 @@ MainWindow::MainWindow()
   m_button_new = new QPushButton("New game", this);
   connect(m_button_new, SIGNAL (clicked()), this, SLOT (buttonNewGame()));
 
+  timer = new QTimer(this);
+  connect(timer,SIGNAL(timeout()),this,SLOT(update()));
+  connect(timer,SIGNAL(timeout()),this,SLOT(buttonNewGame()));
+
   QPalette pal = palette();
 
   // set black background
@@ -87,19 +91,23 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if( event->key() == Qt::Key_W )
     {
-        emit leftRackUp(); // connected elsewhere
+        //emit leftRackUp();
+        myGameBoard->mLeftRack.mY1 -= 1;
     }
     if (event->key() == Qt::Key_S)
     {
-        emit leftRackDown();
+        //emit leftRackDown();
+        myGameBoard->mLeftRack.mY1 += 1;
     }
     if (event->key() == Qt::Key_O)
     {
-        emit rightRackUp();
+        //emit rightRackUp();
+        myGameBoard->mRightRack.mY1 -= 1;
     }
     if(event->key() == Qt::Key_L)
     {
-        emit rightRackDown();
+        //emit rightRackDown();
+        myGameBoard->mRightRack.mY1 -= 1;
     }
 
 }
