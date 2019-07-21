@@ -2,21 +2,36 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QWidget>
+#include <QPushButton>
+#include "gameboardwidget.h"
 
-namespace Ui {
-class MainWindow;
-}
+class GameBoardWidget;
 
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+   MainWindow();
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+   GameBoardWidget *myGameBoard;
+   QPushButton *m_button_new;
+   void centerAndResize();
+   const int UP = -4;
+   const int DOWN = 4;
+
+protected:
+   void keyPressEvent(QKeyEvent *event) override;
+
+private slots:
+    void buttonNewGame();
+    void leftRackUp();
+    void leftRackDown();
+    void rightRackUp();
+    void rightRackDown();
 };
 
 #endif // MAINWINDOW_H
