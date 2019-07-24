@@ -1,5 +1,9 @@
 #include "mainwindow.h"
 #include <QtWidgets>
+#include <QTimer>
+#include <QKeyEvent>
+#include <iostream>
+
 
 MainWindow::MainWindow()
 {
@@ -8,9 +12,9 @@ MainWindow::MainWindow()
   m_button_new = new QPushButton("New game", this);
   connect(m_button_new, SIGNAL (clicked()), this, SLOT (buttonNewGame()));
 
-  timer = new QTimer(this);
-  connect(timer,SIGNAL(timeout()),this,SLOT(update()));
-  connect(timer,SIGNAL(timeout()),this,SLOT(buttonNewGame()));
+  //timer = new QTimer(this);
+  //connect(timer,SIGNAL(timeout()),this,SLOT(update()));
+  //connect(timer,SIGNAL(timeout()),this,SLOT(buttonNewGame()));
 
   QPalette pal = palette();
 
@@ -89,25 +93,65 @@ void MainWindow::rightRackDown()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
+    std::cout << " Key is pressed: " ;
+        if( event->key() == Qt::Key_W )
+        {
+            std::cout << "W" << std::endl;
+            myGameBoard->mLMoving = true;
+            emit leftRackUp();
+
+            //myGameBoard->mLeftRack.mY1 -= 1;
+        }
+        if (event->key() == Qt::Key_S)
+        {
+            std::cout << "S" << std::endl;
+            myGameBoard->mLMoving = true;
+            emit leftRackDown();
+
+            //myGameBoard->mLeftRack.mY1 += 1;
+        }
+        if (event->key() == Qt::Key_O)
+        {
+            std::cout << "O" << std::endl;
+            myGameBoard->mRMoving = true;
+            emit rightRackUp();
+            //myGameBoard->mRightRack.mY1 -= 1;
+        }
+        if(event->key() == Qt::Key_L)
+        {
+            std::cout << "L" << std::endl;
+            myGameBoard->mRMoving = true;
+            emit rightRackDown();
+            //myGameBoard->mRightRack.mY1 -= 1;
+        }
+
+
+
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    std::cout << "Key is released: " ;
     if( event->key() == Qt::Key_W )
     {
-        //emit leftRackUp();
-        myGameBoard->mLeftRack.mY1 -= 1;
+        std::cout << "W" << std::endl;
+        myGameBoard->mLMoving = false;
     }
     if (event->key() == Qt::Key_S)
     {
-        //emit leftRackDown();
-        myGameBoard->mLeftRack.mY1 += 1;
+        std::cout << "S" << std::endl;
+        myGameBoard->mLMoving = false;
     }
     if (event->key() == Qt::Key_O)
     {
-        //emit rightRackUp();
-        myGameBoard->mRightRack.mY1 -= 1;
+        std::cout << "O" << std::endl;
+        myGameBoard->mRMoving = false;
     }
     if(event->key() == Qt::Key_L)
     {
-        //emit rightRackDown();
-        myGameBoard->mRightRack.mY1 -= 1;
+        std::cout << "L" << std::endl;
+        myGameBoard->mRMoving = false;
     }
+    //myGameBoard->mLMoving = false;
 
 }

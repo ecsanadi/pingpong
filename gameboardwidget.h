@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "line.h"
 #include "point.h"
+#include <QKeyEvent>
 
 class GameBoardWidget : public QWidget
 {
@@ -16,11 +17,9 @@ public:
 
     ~GameBoardWidget();
     void init(QSize iSize);
+    bool mRMoving = false;
+    bool mLMoving = false;
 
-    Line mRightRack;
-    Line mLeftRack;
-
-    void checkPositions();
 
 public slots:
     void updateGameBoard();
@@ -29,12 +28,18 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    //void keyPressEvent(QKeyEvent *event);
+    //void keyReleaseEvent(QKeyEvent *event);
 
 private:
     int mRackPenSize;
     int mRackLength;
     Point mBall;
     QSize mSize;
+    Line mRightRack;
+    Line mLeftRack;
+
+    void checkPositions();
 };
 
 #endif // GAMEBOARDWIDGET_H

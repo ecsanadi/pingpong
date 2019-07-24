@@ -24,7 +24,8 @@ private:
    const int DOWN = 4;
 
 protected:
-   void keyPressEvent(QKeyEvent *event) override;
+   void keyPressEvent(QKeyEvent *event);
+   void keyReleaseEvent(QKeyEvent *event);
 
 private slots:
     void buttonNewGame();

@@ -1,6 +1,7 @@
 #include "gameboardwidget.h"
 #include <QPainter>
-
+#include <iostream>
+#include <unistd.h>
 
 GameBoardWidget::~GameBoardWidget()
 {
@@ -14,24 +15,41 @@ void GameBoardWidget::updateGameBoard()
 
 void GameBoardWidget::leftRackMove(int iDirection)
 {
-    if ((mLeftRack.mY1 + iDirection) >= 0 && (mLeftRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
+    while(mLMoving)
     {
-        mLeftRack.mY1 += iDirection;
-        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+        if ((mLeftRack.mY1 + iDirection) >= 0 && (mLeftRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
+        {
+            mLeftRack.mY1 += iDirection;
+            mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+        }
+
+        sleep(1);
+        std::cout << "mLeftRack.mY1: " << mLeftRack.mY1 << std::endl;
+
+        update();
     }
 
-    update();
 }
 
 void GameBoardWidget::rightRackMove(int iDirection)
 {
-    if ((mRightRack.mY1 + iDirection) >= 0 && (mRightRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
+    while(mRMoving)
     {
-        mRightRack.mY1 += iDirection;
-        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        if ((mRightRack.mY1 + iDirection) >= 0 && (mRightRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
+        {
+            mRightRack.mY1 += iDirection;
+            mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        }
+
+        std::cout << "mRightRack.mY1: " << mRightRack.mY1 << std::endl;
+
+        update();
+
+        sleep(1);
+
+
     }
 
-    update();
 }
 
 void GameBoardWidget::init(QSize iSize)
