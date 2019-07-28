@@ -29,10 +29,7 @@ protected:
 
 private slots:
     void buttonNewGame();
-    void leftRackUp();
-    void leftRackDown();
-    void rightRackUp();
-    void rightRackDown();
+    void updateGameBoard();
 };
 
 #endif // MAINWINDOW_H

@@ -10,53 +10,40 @@ GameBoardWidget::~GameBoardWidget()
 
 void GameBoardWidget::updateGameBoard()
 {
+    if(mLMovingUp)
+    {
+        mLeftRack.mY1 -= mRackSpeed;
+        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+    }
+    if(mLMovingDo)
+    {
+        mLeftRack.mY1 += mRackSpeed;
+        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+    }
+    if(mRMovingUp)
+    {
+        mRightRack.mY1 -= mRackSpeed;
+        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+    }
+    if(mRMovingDo)
+    {
+        mRightRack.mY1 += mRackSpeed;
+        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+    }
+
+    //TODO: update ball position here
+
     update();
-}
-
-void GameBoardWidget::leftRackMove(int iDirection)
-{
-    while(mLMoving)
-    {
-        if ((mLeftRack.mY1 + iDirection) >= 0 && (mLeftRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
-        {
-            mLeftRack.mY1 += iDirection;
-            mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
-        }
-
-        sleep(1);
-        std::cout << "mLeftRack.mY1: " << mLeftRack.mY1 << std::endl;
-
-        update();
-    }
 
 }
 
-void GameBoardWidget::rightRackMove(int iDirection)
-{
-    while(mRMoving)
-    {
-        if ((mRightRack.mY1 + iDirection) >= 0 && (mRightRack.mY1 + iDirection + mRackLength) <= (mSize.height() - 60))
-        {
-            mRightRack.mY1 += iDirection;
-            mRightRack.mY2 = mRightRack.mY1 + mRackLength;
-        }
-
-        std::cout << "mRightRack.mY1: " << mRightRack.mY1 << std::endl;
-
-        update();
-
-        sleep(1);
-
-
-    }
-
-}
 
 void GameBoardWidget::init(QSize iSize)
 {
     mSize = iSize;
     mRackPenSize = 20;
     mRackLength = 90;
+    mRackSpeed = 4;
 
     mRightRack.mX1 = mSize.width() - (mRackPenSize * 2) + 5;
     mRightRack.mY1 = 1;
@@ -78,7 +65,7 @@ void GameBoardWidget::checkPositions()
     }
     if(mLeftRack.mY1 + mRackLength > (mSize.height() - 60))
     {
-        mLeftRack.mY1 -= 1;
+        mLeftRack.mY1 -= mRackSpeed;
     }
     mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
 
@@ -88,7 +75,7 @@ void GameBoardWidget::checkPositions()
     }
     if(mRightRack.mY1 + mRackLength > (mSize.height() - 60))
     {
-        mRightRack.mY1 -= 1;
+        mRightRack.mY1 -= mRackSpeed;
     }
     mRightRack.mY2 = mRightRack.mY1 + mRackLength;
 }

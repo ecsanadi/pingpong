@@ -17,8 +17,10 @@ public:
 
     ~GameBoardWidget();
     void init(QSize iSize);
-    bool mRMoving = false;
-    bool mLMoving = false;
+    bool mRMovingUp = false;
+    bool mLMovingUp = false;
+    bool mRMovingDo = false;
+    bool mLMovingDo = false;
 
 
 public slots:
@@ -28,8 +30,6 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    //void keyPressEvent(QKeyEvent *event);
-    //void keyReleaseEvent(QKeyEvent *event);
 
 private:
     int mRackPenSize;
@@ -38,7 +38,7 @@ private:
     QSize mSize;
     Line mRightRack;
     Line mLeftRack;
-
+    int mRackSpeed;
     void checkPositions();
 };
 
