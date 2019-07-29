@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "line.h"
 #include "point.h"
+#include "ball.h"
 #include <QKeyEvent>
 
 class GameBoardWidget : public QWidget
