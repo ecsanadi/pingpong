@@ -31,6 +31,8 @@ void GameBoardWidget::updateGameBoard()
         mRightRack.mY2 = mRightRack.mY1 + mRackLength;
     }
 
+    mBall.updateBallPosition();
+
     //TODO: update ball position here
 
     update();
@@ -44,6 +46,9 @@ void GameBoardWidget::init(QSize iSize)
     mRackPenSize = 20;
     mRackLength = 90;
     mRackSpeed = 4;
+    mBallSize = 15;
+    mBall.init(iSize, mBallSize);
+    mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
 
     mRightRack.mX1 = mSize.width() - (mRackPenSize * 2) + 5;
     mRightRack.mY1 = 1;
@@ -91,6 +96,9 @@ void GameBoardWidget::paintEvent(QPaintEvent */*event*/)
      //painter.drawLine(5,7,25,30);
      painter.drawLine(mRightRack.mX1,mRightRack.mY1,mRightRack.mX2,mRightRack.mY2);
      painter.drawLine(mLeftRack.mX1,mLeftRack.mY1,mLeftRack.mX2,mLeftRack.mY2);
+
+     painter.setPen(QPen(static_cast<QColor>(Qt::white), mBallSize, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
+     painter.drawPoint(mBall.getBallX(), mBall.getBallY());
 
      painter.restore();
 
