@@ -10,6 +10,7 @@ GameBoardWidget::~GameBoardWidget()
 
 void GameBoardWidget::updateGameBoard()
 {
+    //TODO: set rate and set the update of racks and ball dependent on the rate
     if(mLMovingUp)
     {
         mLeftRack.mY1 -= mRackSpeed;
@@ -32,8 +33,6 @@ void GameBoardWidget::updateGameBoard()
     }
 
     mBall.updateBallPosition(mLeftRack,mRightRack);
-
-    //TODO: update ball position here
 
     update();
 
@@ -95,7 +94,7 @@ void GameBoardWidget::paintEvent(QPaintEvent */*event*/)
 
      checkPositions();
 
-     //painter.drawLine(5,7,25,30);
+     // TODO: draw vertical line across the center of the gameboard
      painter.drawLine(mRightRack.mX1,mRightRack.mY1,mRightRack.mX2,mRightRack.mY2);
      painter.drawLine(mLeftRack.mX1,mLeftRack.mY1,mLeftRack.mX2,mLeftRack.mY2);
 

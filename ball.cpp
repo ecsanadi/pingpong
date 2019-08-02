@@ -7,7 +7,6 @@ Ball::Ball()
 
 void Ball::init(QSize iSize, int iBallSize)
 {
-    //TODO: set size of gameboard to handle ball moving
     mGameBoardHeight = iSize.height();
     mGameBoardWidth = iSize.width();
     mBallSize = iBallSize;

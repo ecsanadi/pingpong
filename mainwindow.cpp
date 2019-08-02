@@ -40,7 +40,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    //delete ui;
+    //TODO: check what should be free
 }
 
 void MainWindow::buttonNewGame()
