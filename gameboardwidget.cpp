@@ -31,7 +31,7 @@ void GameBoardWidget::updateGameBoard()
         mRightRack.mY2 = mRightRack.mY1 + mRackLength;
     }
 
-    mBall.updateBallPosition();
+    mBall.updateBallPosition(mLeftRack,mRightRack);
 
     //TODO: update ball position here
 
@@ -43,14 +43,16 @@ void GameBoardWidget::updateGameBoard()
 void GameBoardWidget::init(QSize iSize)
 {
     mSize = iSize;
+    mSize.setHeight(mSize.height() - 60);
+    mSize.setWidth(mSize.width()-25);
     mRackPenSize = 20;
     mRackLength = 90;
     mRackSpeed = 4;
     mBallSize = 15;
-    mBall.init(iSize, mBallSize);
+    mBall.init(mSize, mBallSize);
     mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
 
-    mRightRack.mX1 = mSize.width() - (mRackPenSize * 2) + 5;
+    mRightRack.mX1 = mSize.width() - mRackPenSize / 2;
     mRightRack.mY1 = 1;
     mRightRack.mX2 = mRightRack.mX1;
     mRightRack.mY2 = mRightRack.mY1 + mRackLength;
@@ -68,7 +70,7 @@ void GameBoardWidget::checkPositions()
     {
         mLeftRack.mY1 = 1;
     }
-    if(mLeftRack.mY1 + mRackLength > (mSize.height() - 60))
+    if(mLeftRack.mY1 + mRackLength > (mSize.height()))
     {
         mLeftRack.mY1 -= mRackSpeed;
     }
@@ -78,7 +80,7 @@ void GameBoardWidget::checkPositions()
     {
         mRightRack.mY1 = 1;
     }
-    if(mRightRack.mY1 + mRackLength > (mSize.height() - 60))
+    if(mRightRack.mY1 + mRackLength > (mSize.height()))
     {
         mRightRack.mY1 -= mRackSpeed;
     }

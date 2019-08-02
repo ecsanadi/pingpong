@@ -1,6 +1,6 @@
 #ifndef BALL_H
 #define BALL_H
-
+#include "line.h"
 #include <QSize>
 
 class Ball
@@ -12,7 +12,7 @@ public:
     void init(QSize iSize, int iBallSize);
 
     void setBallPosition(int iX, int iY);
-    void updateBallPosition(); //TODO: moving may can be executed from gameboard by adding direction parameters here
+    void updateBallPosition(Line iLeftRack, Line iRightRack); //TODO: moving may can be executed from gameboard by adding direction parameters here
     void setBallXDirection(int iXDirection);
     void setBallYDirection(int iYDirection);
     int getBallXDirection();

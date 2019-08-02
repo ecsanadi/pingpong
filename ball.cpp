@@ -22,20 +22,30 @@ void Ball::setBallPosition(int x, int y)
     mY = y;
 }
 
-void Ball::updateBallPosition()
-{
+void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
+{    
     int wXCheckpoint = mX + mXDirection + (mBallSize / 2);
     int wYCheckpoint = mY + mYDirection + (mBallSize / 2);
     int wSpeed = 4;
 
-    if(wXCheckpoint < 0 || wXCheckpoint > mGameBoardWidth)
+    // check if there is a hit
+    if (wXCheckpoint <= (iLeftRack.mX1 + 25) && wYCheckpoint < iLeftRack.mY2 && wYCheckpoint > iLeftRack.mY1)
     {
         mXDirection *= -1;
     }
-    if(wYCheckpoint < 0 || wYCheckpoint > mGameBoardHeight)
+    else if(wXCheckpoint >= (iRightRack.mX1 - 10) && wYCheckpoint < iRightRack.mY2 && wYCheckpoint > iRightRack.mY1)
+    {
+        mXDirection *= -1;
+    }
+
+    // check if ball is at top or bottom
+    if(wYCheckpoint < 20 || wYCheckpoint > mGameBoardHeight)
     {
         mYDirection *= -1;
     }
+
+    // TODO: Add logic for "new" ball if it went out
+
     mX += (mXDirection * wSpeed);
     mY += (mYDirection * wSpeed);
 }
