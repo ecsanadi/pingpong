@@ -28,13 +28,15 @@ SOURCES += \
         mainwindow.cpp \
     gameboardwidget.cpp \
     line.cpp \
-    point.cpp
+    point.cpp \
+    ball.cpp
 
 HEADERS += \
         mainwindow.h \
     gameboardwidget.h \
     line.h \
-    point.h
+    point.h \
+    ball.h
 
 FORMS += \
         mainwindow.ui

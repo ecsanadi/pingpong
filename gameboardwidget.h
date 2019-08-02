@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "line.h"
 #include "point.h"
+#include "ball.h"
 #include <QKeyEvent>
 
 class GameBoardWidget : public QWidget
@@ -34,12 +35,13 @@ protected:
 private:
     int mRackPenSize;
     int mRackLength;
-    Point mBall;
+    Ball mBall;
     QSize mSize;
     Line mRightRack;
     Line mLeftRack;
     int mRackSpeed;
     void checkPositions();
+    int mBallSize;
 };
 
 #endif // GAMEBOARDWIDGET_H
