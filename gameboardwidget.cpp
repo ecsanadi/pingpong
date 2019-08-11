@@ -10,6 +10,11 @@ GameBoardWidget::~GameBoardWidget()
 
 void GameBoardWidget::setGameSpeed(int iSpeedLevel)
 {
+    if(iSpeedLevel > 5)
+    {
+        mGameSpeed = 5;
+    }
+
     switch(iSpeedLevel)
     {
     case 1:
@@ -33,8 +38,8 @@ void GameBoardWidget::setGameSpeed(int iSpeedLevel)
         mRackUpdateSpeed = 1;
         break;
     default:
-        mBallUpdateSpeed = 5;
-        mRackUpdateSpeed = 4;
+        mBallUpdateSpeed = 2;
+        mRackUpdateSpeed = 1;
 
     }
     // TODO: set speed if time elapse
@@ -50,6 +55,14 @@ void GameBoardWidget::updateGameBoard()
     if(mBall.getIsBallOut())
     {
         resetGameBoard();
+    }
+
+
+    ms_current = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    if(ms_current - ms_last > ms_delta)
+    {
+        ms_last = ms_current;
+        setGameSpeed(++mGameSpeed);
     }
 
     if (wRackUpdateCounter <= 0 )
@@ -115,11 +128,15 @@ void GameBoardWidget::init(QSize iSize)
         mSize.setHeight(mSize.height() - 60);
         mSize.setWidth(mSize.width()-25);
     }
+    ms_current = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    ms_last = ms_current;
+    ms_delta = std::chrono::milliseconds(60000);
     mRackPenSize = 20;
     mRackLength = 90;
     mRackSpeed = 3;
     mBallSize = 15;
-    setGameSpeed(1);
+    mGameSpeed = 5;
+    setGameSpeed(mGameSpeed);
     mBall.init(mSize, mBallSize);
     mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
 

@@ -27,7 +27,7 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
 {    
     int wXCheckpoint = mX + mXDirection + (mBallSize / 2);
     int wYCheckpoint = mY + mYDirection + (mBallSize / 2);
-    int wBallSpeed = 2;
+    int wBallSpeed = 4;
 
     // check if there is a hit
     if (wXCheckpoint <= (iLeftRack.mX1 + 25) && wYCheckpoint < iLeftRack.mY2 && wYCheckpoint > iLeftRack.mY1)

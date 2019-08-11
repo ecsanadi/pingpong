@@ -14,7 +14,7 @@ MainWindow::MainWindow()
 
   QTimer *timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(updateGameBoard()));
-  timer->start(10);
+  timer->start(5);
 
   QPalette pal = palette();
 

@@ -6,6 +6,9 @@
 #include "point.h"
 #include "ball.h"
 #include <QKeyEvent>
+#include <chrono>
+
+using namespace std::chrono;
 
 class GameBoardWidget : public QWidget
 {
@@ -47,7 +50,10 @@ private:
     bool mIsUpdate;
     int mBallUpdateSpeed;
     int mRackUpdateSpeed;
-
+    int mGameSpeed;
+    milliseconds ms_current;
+    milliseconds ms_last;
+    milliseconds ms_delta;
 };
 
 #endif // GAMEBOARDWIDGET_H
