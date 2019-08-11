@@ -8,46 +8,118 @@ GameBoardWidget::~GameBoardWidget()
 
 }
 
+void GameBoardWidget::setGameSpeed(int iSpeedLevel)
+{
+    switch(iSpeedLevel)
+    {
+    case 1:
+        mBallUpdateSpeed = 6;
+        mRackUpdateSpeed = 5;
+        break;
+    case 2:
+        mBallUpdateSpeed = 5;
+        mRackUpdateSpeed = 4;
+        break;
+    case 3:
+        mBallUpdateSpeed = 4;
+        mRackUpdateSpeed = 3;
+        break;
+    case 4:
+        mBallUpdateSpeed = 3;
+        mRackUpdateSpeed = 2;
+        break;
+    case 5:
+        mBallUpdateSpeed = 2;
+        mRackUpdateSpeed = 1;
+        break;
+    default:
+        mBallUpdateSpeed = 5;
+        mRackUpdateSpeed = 4;
+
+    }
+    // TODO: set speed if time elapse
+    // TODO: reset board but not start game without pressing NewGame button
+    // TODO: add labels and scores
+}
+
 void GameBoardWidget::updateGameBoard()
 {
-    //TODO: set rate and set the update of racks and ball dependent on the rate
-    if(mLMovingUp)
+    static int wRackUpdateCounter = mRackUpdateSpeed;
+    static int wBallUpdateCounter = mBallUpdateSpeed;
+
+    if(mBall.getIsBallOut())
     {
-        mLeftRack.mY1 -= mRackSpeed;
-        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
-    }
-    if(mLMovingDo)
-    {
-        mLeftRack.mY1 += mRackSpeed;
-        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
-    }
-    if(mRMovingUp)
-    {
-        mRightRack.mY1 -= mRackSpeed;
-        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
-    }
-    if(mRMovingDo)
-    {
-        mRightRack.mY1 += mRackSpeed;
-        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        resetGameBoard();
     }
 
-    mBall.updateBallPosition(mLeftRack,mRightRack);
+    if (wRackUpdateCounter <= 0 )
+    {
+        wRackUpdateCounter = mRackUpdateSpeed;
+        if(mLMovingUp)
+        {
+            mLeftRack.mY1 -= mRackSpeed;
+            mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+        }
+        if(mLMovingDo)
+        {
+            mLeftRack.mY1 += mRackSpeed;
+            mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+        }
+        if(mRMovingUp)
+        {
+            mRightRack.mY1 -= mRackSpeed;
+            mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        }
+        if(mRMovingDo)
+        {
+            mRightRack.mY1 += mRackSpeed;
+            mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        }
+        mIsUpdate = true;
+    }
+    else
+    {
+        wRackUpdateCounter--;
+    }
 
-    update();
+    if (wBallUpdateCounter <= 0)
+    {
+        wBallUpdateCounter = mBallUpdateSpeed;
+        mBall.updateBallPosition(mLeftRack,mRightRack);
+        mIsUpdate = true;
+    }
+    else
+    {
+        wBallUpdateCounter--;
+    }
+
+    if(mIsUpdate)
+    {
+        mIsUpdate = false;
+        update();
+    }
 
 }
 
+void GameBoardWidget::resetGameBoard()
+{
+    init(mSize);
+    update();
+}
 
 void GameBoardWidget::init(QSize iSize)
 {
-    mSize = iSize;
-    mSize.setHeight(mSize.height() - 60);
-    mSize.setWidth(mSize.width()-25);
+    if (mSize != iSize)
+    {
+        mSize = iSize;
+        mSize.setHeight(mSize.height() - 60);
+        mSize.setWidth(mSize.width()-25);
+    }
     mRackPenSize = 20;
     mRackLength = 90;
-    mRackSpeed = 4;
+    mRackSpeed = 3;
     mBallSize = 15;
+    setGameSpeed(1);
     mBall.init(mSize, mBallSize);
     mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
 

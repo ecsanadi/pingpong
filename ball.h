@@ -19,6 +19,7 @@ public:
     int getBallYDirection();
     int getBallX();
     int getBallY();
+    bool getIsBallOut(){return mIsBallOut;}
 
 private:
     int mGameBoardHeight;
@@ -28,6 +29,7 @@ private:
     int mX;
     int mY;
     int mBallSize;
+    bool mIsBallOut;
 
 
 

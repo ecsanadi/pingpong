@@ -1,5 +1,6 @@
 #include "ball.h"
 
+
 Ball::Ball()
 {
 
@@ -12,6 +13,7 @@ void Ball::init(QSize iSize, int iBallSize)
     mBallSize = iBallSize;
     mXDirection = 1;
     mYDirection = -1;
+    mIsBallOut = false;
 
 }
 
@@ -25,7 +27,7 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
 {    
     int wXCheckpoint = mX + mXDirection + (mBallSize / 2);
     int wYCheckpoint = mY + mYDirection + (mBallSize / 2);
-    int wSpeed = 4;
+    int wBallSpeed = 2;
 
     // check if there is a hit
     if (wXCheckpoint <= (iLeftRack.mX1 + 25) && wYCheckpoint < iLeftRack.mY2 && wYCheckpoint > iLeftRack.mY1)
@@ -43,10 +45,16 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
         mYDirection *= -1;
     }
 
+    // check if ball went out
+    if(wXCheckpoint < 0 || wXCheckpoint > mGameBoardWidth)
+    {
+        mIsBallOut = true;
+    }
+
     // TODO: Add logic for "new" ball if it went out
 
-    mX += (mXDirection * wSpeed);
-    mY += (mYDirection * wSpeed);
+    mX += (mXDirection * wBallSpeed);
+    mY += (mYDirection * wBallSpeed);
 }
 
 void Ball::setBallXDirection(int iXDirection)

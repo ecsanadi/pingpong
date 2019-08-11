@@ -26,8 +26,10 @@ public:
 
 public slots:
     void updateGameBoard();
+    void resetGameBoard();
     void leftRackMove(int iDirection);
     void rightRackMove(int iDirection);
+    void setGameSpeed(int iSpeedLevel);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -42,6 +44,10 @@ private:
     int mRackSpeed;
     void checkPositions();
     int mBallSize;
+    bool mIsUpdate;
+    int mBallUpdateSpeed;
+    int mRackUpdateSpeed;
+
 };
 
 #endif // GAMEBOARDWIDGET_H
