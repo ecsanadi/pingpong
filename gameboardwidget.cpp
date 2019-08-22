@@ -44,7 +44,7 @@ void GameBoardWidget::setGameSpeed(int iSpeedLevel)
     }
 
     // TODO: reset board but not start game without pressing NewGame button
-    // TODO: add labels and scores
+
 }
 
 void GameBoardWidget::updateGameBoard()

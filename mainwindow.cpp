@@ -16,6 +16,10 @@ MainWindow::MainWindow()
   connect(timer, SIGNAL(timeout()), this, SLOT(updateGameBoard()));
   timer->start(5);
 
+  QTimer *elapse = new QTimer(this);
+  connect(elapse, SIGNAL(timeout()), this, SLOT(updateTimerLabel()));
+  elapse->start(1000);
+
   QPalette pal = palette();
 
   // set black background
@@ -26,15 +30,20 @@ MainWindow::MainWindow()
   mScoreLabel = new QLabel(this);
   mScoreLabel->setText( getScoreLabelText() );
 
+  mTimeElapsed = new QLabel(this);
+
   QGridLayout *mainLayout = new QGridLayout;
 
   mainLayout->addWidget(myGameBoard, 0, 0);
   mainLayout->addWidget(m_button_new, 1, 0,Qt::AlignRight);
   mainLayout->addWidget(mScoreLabel, 1,0 , Qt::AlignLeft);
+  mainLayout->addWidget(mTimeElapsed, 1, 0, Qt::AlignCenter);
 
   setLayout(mainLayout);
 
   buttonNewGame();
+
+  mGameTime.start();
 
   setWindowTitle(tr("PingPong"));
 
@@ -47,9 +56,21 @@ MainWindow::~MainWindow()
     //TODO: check what should be free
 }
 
-void MainWindow::countDown()
+QString MainWindow::timeElapsed()
 {
     //TODO: display game time
+    //return (QString::number(mGameTime.elapsed()));
+    //return mGameTime.elapsed().toString("hh:mm:ss");
+    //return QDateTime::fromTime_t(mGameTime.elapsed()).toUTC().toString("hh:mm:ss");
+    return QString("%1:%2").arg( mGameTime.elapsed() / 60000        , 2, 10, QChar('0'))
+                                  .arg((mGameTime.elapsed() % 60000) / 1000, 2, 10, QChar('0'));
+
+}
+
+void MainWindow::updateTimerLabel()
+{
+   mTimeElapsed->clear();
+   mTimeElapsed->setText(timeElapsed());
 }
 
 QString MainWindow::getScoreLabelText()
@@ -65,6 +86,7 @@ QString MainWindow::getScoreLabelText()
 void MainWindow::buttonNewGame()
 {
     myGameBoard->resetGameBoard();
+    mGameTime.start();
     emit updateGameBoard();
 }
 
