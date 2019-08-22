@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include "gameboardwidget.h"
+#include <QLabel>
 
 class GameBoardWidget;
 
@@ -19,9 +20,12 @@ public:
 private:
    GameBoardWidget *myGameBoard;
    QPushButton *m_button_new;
+   QLabel *mScoreLabel;
    void centerAndResize();
    const int UP = -4;
    const int DOWN = 4;
+   void countDown();
+   QString getScoreLabelText();
 
 protected:
    void keyPressEvent(QKeyEvent *event);

@@ -38,11 +38,11 @@ void GameBoardWidget::setGameSpeed(int iSpeedLevel)
         mRackUpdateSpeed = 1;
         break;
     default:
-        mBallUpdateSpeed = 2;
+        mBallUpdateSpeed = 1;
         mRackUpdateSpeed = 1;
 
     }
-    // TODO: set speed if time elapse
+
     // TODO: reset board but not start game without pressing NewGame button
     // TODO: add labels and scores
 }
@@ -98,7 +98,7 @@ void GameBoardWidget::updateGameBoard()
     if (wBallUpdateCounter <= 0)
     {
         wBallUpdateCounter = mBallUpdateSpeed;
-        mBall.updateBallPosition(mLeftRack,mRightRack);
+        mBall.updateBallPosition(mLeftRack,mRightRack, mLScore, mRScore);
         mIsUpdate = true;
     }
     else
@@ -131,11 +131,13 @@ void GameBoardWidget::init(QSize iSize)
     ms_current = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
     ms_last = ms_current;
     ms_delta = std::chrono::milliseconds(60000);
+    mLScore = 0;
+    mRScore = 0;
     mRackPenSize = 20;
     mRackLength = 90;
     mRackSpeed = 3;
     mBallSize = 15;
-    mGameSpeed = 5;
+    mGameSpeed = 1;
     setGameSpeed(mGameSpeed);
     mBall.init(mSize, mBallSize);
     mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
@@ -149,6 +151,11 @@ void GameBoardWidget::init(QSize iSize)
     mLeftRack.mY1 = 1;
     mLeftRack.mX2 = mLeftRack.mX1;
     mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+
+    mCenterLine.mX1 = mSize.width() / 2;
+    mCenterLine.mX2 = mCenterLine.mX1;
+    mCenterLine.mY1 = 1;
+    mCenterLine.mY2 = mSize.height();
 
 }
 
@@ -179,11 +186,12 @@ void GameBoardWidget::paintEvent(QPaintEvent */*event*/)
 {
      QPainter painter(this);
      painter.save();
-     painter.setPen(QPen(static_cast<QColor>(Qt::white), mRackPenSize, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
 
      checkPositions();
 
-     // TODO: draw vertical line across the center of the gameboard
+     painter.setPen(QPen(static_cast<QColor>(Qt::white), mRackPenSize/3, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
+     painter.drawLine(mCenterLine.mX1, mCenterLine.mY1, mCenterLine.mX2, mCenterLine.mY2);
+     painter.setPen(QPen(static_cast<QColor>(Qt::white), mRackPenSize, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
      painter.drawLine(mRightRack.mX1,mRightRack.mY1,mRightRack.mX2,mRightRack.mY2);
      painter.drawLine(mLeftRack.mX1,mLeftRack.mY1,mLeftRack.mX2,mLeftRack.mY2);
 

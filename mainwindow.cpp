@@ -23,10 +23,14 @@ MainWindow::MainWindow()
   myGameBoard->setAutoFillBackground(true);
   myGameBoard->setPalette(pal);
 
+  mScoreLabel = new QLabel(this);
+  mScoreLabel->setText( getScoreLabelText() );
+
   QGridLayout *mainLayout = new QGridLayout;
 
   mainLayout->addWidget(myGameBoard, 0, 0);
-  mainLayout->addWidget(m_button_new, 1, 0);
+  mainLayout->addWidget(m_button_new, 1, 0,Qt::AlignRight);
+  mainLayout->addWidget(mScoreLabel, 1,0 , Qt::AlignLeft);
 
   setLayout(mainLayout);
 
@@ -43,6 +47,21 @@ MainWindow::~MainWindow()
     //TODO: check what should be free
 }
 
+void MainWindow::countDown()
+{
+    //TODO: display game time
+}
+
+QString MainWindow::getScoreLabelText()
+{
+    QString wScoreText;
+    wScoreText.append( "Score: " );
+    wScoreText.append(QString::number(myGameBoard->getLScore()));
+    wScoreText.append( " : " );
+    wScoreText.append(QString::number(myGameBoard->getRScore()));
+    return wScoreText;
+}
+
 void MainWindow::buttonNewGame()
 {
     myGameBoard->resetGameBoard();
@@ -51,6 +70,8 @@ void MainWindow::buttonNewGame()
 
 void MainWindow::updateGameBoard()
 {
+    mScoreLabel->clear();
+    mScoreLabel->setText( getScoreLabelText() );
     myGameBoard->updateGameBoard();
 }
 

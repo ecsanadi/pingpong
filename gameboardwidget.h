@@ -25,6 +25,8 @@ public:
     bool mLMovingUp = false;
     bool mRMovingDo = false;
     bool mLMovingDo = false;
+    int getLScore(){return mLScore;}
+    int getRScore(){return mRScore;}
 
 
 public slots:
@@ -44,6 +46,7 @@ private:
     QSize mSize;
     Line mRightRack;
     Line mLeftRack;
+    Line mCenterLine;
     int mRackSpeed;
     void checkPositions();
     int mBallSize;
@@ -54,6 +57,8 @@ private:
     milliseconds ms_current;
     milliseconds ms_last;
     milliseconds ms_delta;
+    int mLScore;
+    int mRScore;
 };
 
 #endif // GAMEBOARDWIDGET_H

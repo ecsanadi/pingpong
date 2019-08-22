@@ -23,7 +23,7 @@ void Ball::setBallPosition(int x, int y)
     mY = y;
 }
 
-void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
+void Ball::updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int &iRScore)
 {    
     int wXCheckpoint = mX + mXDirection + (mBallSize / 2);
     int wYCheckpoint = mY + mYDirection + (mBallSize / 2);
@@ -33,10 +33,12 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
     if (wXCheckpoint <= (iLeftRack.mX1 + 25) && wYCheckpoint < iLeftRack.mY2 && wYCheckpoint > iLeftRack.mY1)
     {
         mXDirection *= -1;
+        iLScore++;
     }
     else if(wXCheckpoint >= (iRightRack.mX1 - 10) && wYCheckpoint < iRightRack.mY2 && wYCheckpoint > iRightRack.mY1)
     {
         mXDirection *= -1;
+        iRScore++;
     }
 
     // check if ball is at top or bottom
