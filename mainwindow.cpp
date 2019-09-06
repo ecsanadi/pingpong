@@ -9,14 +9,17 @@ MainWindow::MainWindow()
 {
   myGameBoard = new GameBoardWidget;
 
+   ///*myGameBoard*/this->setFocusPolicy(Qt::NoFocus);
+
+
   m_button_new = new QPushButton("New game", this);
   connect(m_button_new, SIGNAL (clicked()), this, SLOT (buttonNewGame()));
 
-  QTimer *timer = new QTimer(this);
+  timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(updateGameBoard()));
   timer->start(5);
 
-  QTimer *elapse = new QTimer(this);
+  elapse = new QTimer(this);
   connect(elapse, SIGNAL(timeout()), this, SLOT(updateTimerLabel()));
   elapse->start(1000);
 
@@ -41,6 +44,8 @@ MainWindow::MainWindow()
 
   setLayout(mainLayout);
 
+  paused = false;
+
   buttonNewGame();
 
   mGameTime.start();
@@ -48,6 +53,8 @@ MainWindow::MainWindow()
   setWindowTitle(tr("PingPong"));
 
   centerAndResize();
+
+
 
 }
 
@@ -58,10 +65,7 @@ MainWindow::~MainWindow()
 
 QString MainWindow::timeElapsed()
 {
-    //TODO: display game time
-    //return (QString::number(mGameTime.elapsed()));
-    //return mGameTime.elapsed().toString("hh:mm:ss");
-    //return QDateTime::fromTime_t(mGameTime.elapsed()).toUTC().toString("hh:mm:ss");
+
     return QString("%1:%2").arg( mGameTime.elapsed() / 60000        , 2, 10, QChar('0'))
                                   .arg((mGameTime.elapsed() % 60000) / 1000, 2, 10, QChar('0'));
 
@@ -95,6 +99,20 @@ void MainWindow::updateGameBoard()
     mScoreLabel->clear();
     mScoreLabel->setText( getScoreLabelText() );
     myGameBoard->updateGameBoard();
+}
+
+void MainWindow::pauseGame()
+{
+    timer->stop();
+    elapse->stop();
+
+}
+
+void MainWindow::continueGame()
+{
+    timer->start();
+    elapse->start();
+
 }
 
 void MainWindow::centerAndResize() {
@@ -146,6 +164,21 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         {
             std::cout << "L" << std::endl;
             myGameBoard->mRMovingDo = true;
+        }
+        if(event->key() == Qt::Key_P)
+        {
+            // TODO: catch space instead of P
+            std::cout << "SPACE" << std::endl;
+            if(paused)
+            {
+                paused = false;
+                continueGame();
+            }
+            else
+            {
+                paused = true;
+                pauseGame();
+            }
         }
     }
 

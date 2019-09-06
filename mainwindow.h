@@ -29,6 +29,11 @@ private:
    QString timeElapsed();
    QString getScoreLabelText();
    QTime mGameTime;
+   QTimer *timer;
+   QTimer *elapse;
+   void pauseGame();
+   void continueGame();
+   bool paused;
 
 protected:
    void keyPressEvent(QKeyEvent *event);
@@ -38,6 +43,7 @@ private slots:
     void buttonNewGame();
     void updateGameBoard();
     void updateTimerLabel();
+
 };
 
 #endif // MAINWINDOW_H
