@@ -8,49 +8,141 @@ GameBoardWidget::~GameBoardWidget()
 
 }
 
+void GameBoardWidget::setGameSpeed(int iSpeedLevel)
+{
+    if(iSpeedLevel > 5)
+    {
+        mGameSpeed = 5;
+    }
+
+    switch(iSpeedLevel)
+    {
+    case 1:
+        mBallUpdateSpeed = 6;
+        mRackUpdateSpeed = 5;
+        break;
+    case 2:
+        mBallUpdateSpeed = 5;
+        mRackUpdateSpeed = 4;
+        break;
+    case 3:
+        mBallUpdateSpeed = 4;
+        mRackUpdateSpeed = 3;
+        break;
+    case 4:
+        mBallUpdateSpeed = 3;
+        mRackUpdateSpeed = 2;
+        break;
+    case 5:
+        mBallUpdateSpeed = 2;
+        mRackUpdateSpeed = 1;
+        break;
+    default:
+        mBallUpdateSpeed = 1;
+        mRackUpdateSpeed = 1;
+
+    }
+}
+
 void GameBoardWidget::updateGameBoard()
 {
-    if(mLMovingUp)
+    static int wRackUpdateCounter = mRackUpdateSpeed;
+    static int wBallUpdateCounter = mBallUpdateSpeed;
+
+    if(mBall.getIsBallOut())
     {
-        mLeftRack.mY1 -= mRackSpeed;
-        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
-    }
-    if(mLMovingDo)
-    {
-        mLeftRack.mY1 += mRackSpeed;
-        mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
-    }
-    if(mRMovingUp)
-    {
-        mRightRack.mY1 -= mRackSpeed;
-        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
-    }
-    if(mRMovingDo)
-    {
-        mRightRack.mY1 += mRackSpeed;
-        mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        resetBallPosition();
     }
 
-    mBall.updateBallPosition(mLeftRack,mRightRack);
+    ms_current = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    if(ms_current - ms_last > ms_delta)
+    {
+        ms_last = ms_current;
+        setGameSpeed(++mGameSpeed);
+    }
 
-    //TODO: update ball position here
+    if (wRackUpdateCounter <= 0 )
+    {
+        wRackUpdateCounter = mRackUpdateSpeed;
+        if(mLMovingUp)
+        {
+            mLeftRack.mY1 -= mRackSpeed;
+            mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+        }
+        if(mLMovingDo)
+        {
+            mLeftRack.mY1 += mRackSpeed;
+            mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+        }
+        if(mRMovingUp)
+        {
+            mRightRack.mY1 -= mRackSpeed;
+            mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        }
+        if(mRMovingDo)
+        {
+            mRightRack.mY1 += mRackSpeed;
+            mRightRack.mY2 = mRightRack.mY1 + mRackLength;
+        }
+        mIsUpdate = true;
+    }
+    else
+    {
+        wRackUpdateCounter--;
+    }
 
-    update();
+    if (wBallUpdateCounter <= 0)
+    {
+        wBallUpdateCounter = mBallUpdateSpeed;
+        mBall.updateBallPosition(mLeftRack,mRightRack, mLScore, mRScore);
+        mIsUpdate = true;
+    }
+    else
+    {
+        wBallUpdateCounter--;
+    }
+
+    if(mIsUpdate)
+    {
+        mIsUpdate = false;
+        update();
+    }
 
 }
 
+void GameBoardWidget::resetGameBoard()
+{
+    init(mSize);
+    update();
+}
+
+
+void GameBoardWidget::resetBallPosition()
+{
+    mBall.init(mSize, mBallSize);
+    mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
+}
 
 void GameBoardWidget::init(QSize iSize)
 {
-    mSize = iSize;
-    mSize.setHeight(mSize.height() - 60);
-    mSize.setWidth(mSize.width()-25);
+    if (mSize != iSize)
+    {
+        mSize = iSize;
+        mSize.setHeight(mSize.height() - 60);
+        mSize.setWidth(mSize.width()-25);
+    }
+    ms_current = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
+    ms_last = ms_current;
+    ms_delta = std::chrono::milliseconds(60000);
+    mLScore = 0;
+    mRScore = 0;
     mRackPenSize = 20;
     mRackLength = 90;
-    mRackSpeed = 4;
+    mRackSpeed = 3;
     mBallSize = 15;
-    mBall.init(mSize, mBallSize);
-    mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
+    mGameSpeed = 1;
+    setGameSpeed(mGameSpeed);
+    resetBallPosition();
 
     mRightRack.mX1 = mSize.width() - mRackPenSize / 2;
     mRightRack.mY1 = 1;
@@ -61,6 +153,11 @@ void GameBoardWidget::init(QSize iSize)
     mLeftRack.mY1 = 1;
     mLeftRack.mX2 = mLeftRack.mX1;
     mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
+
+    mCenterLine.mX1 = mSize.width() / 2;
+    mCenterLine.mX2 = mCenterLine.mX1;
+    mCenterLine.mY1 = 1;
+    mCenterLine.mY2 = mSize.height();
 
 }
 
@@ -91,11 +188,12 @@ void GameBoardWidget::paintEvent(QPaintEvent */*event*/)
 {
      QPainter painter(this);
      painter.save();
-     painter.setPen(QPen(static_cast<QColor>(Qt::white), mRackPenSize, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
 
      checkPositions();
 
-     //painter.drawLine(5,7,25,30);
+     painter.setPen(QPen(static_cast<QColor>(Qt::white), mRackPenSize/3, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
+     painter.drawLine(mCenterLine.mX1, mCenterLine.mY1, mCenterLine.mX2, mCenterLine.mY2);
+     painter.setPen(QPen(static_cast<QColor>(Qt::white), mRackPenSize, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
      painter.drawLine(mRightRack.mX1,mRightRack.mY1,mRightRack.mX2,mRightRack.mY2);
      painter.drawLine(mLeftRack.mX1,mLeftRack.mY1,mLeftRack.mX2,mLeftRack.mY2);
 

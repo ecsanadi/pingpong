@@ -6,6 +6,9 @@
 #include "point.h"
 #include "ball.h"
 #include <QKeyEvent>
+#include <chrono>
+
+using namespace std::chrono;
 
 class GameBoardWidget : public QWidget
 {
@@ -22,12 +25,17 @@ public:
     bool mLMovingUp = false;
     bool mRMovingDo = false;
     bool mLMovingDo = false;
+    int getLScore(){return mLScore;}
+    int getRScore(){return mRScore;}
 
 
 public slots:
     void updateGameBoard();
+    void resetGameBoard();
+    void resetBallPosition();
     void leftRackMove(int iDirection);
     void rightRackMove(int iDirection);
+    void setGameSpeed(int iSpeedLevel);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -39,9 +47,19 @@ private:
     QSize mSize;
     Line mRightRack;
     Line mLeftRack;
+    Line mCenterLine;
     int mRackSpeed;
     void checkPositions();
     int mBallSize;
+    bool mIsUpdate;
+    int mBallUpdateSpeed;
+    int mRackUpdateSpeed;
+    int mGameSpeed;
+    milliseconds ms_current;
+    milliseconds ms_last;
+    milliseconds ms_delta;
+    int mLScore;
+    int mRScore;
 };
 
 #endif // GAMEBOARDWIDGET_H

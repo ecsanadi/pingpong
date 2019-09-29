@@ -12,9 +12,13 @@ MainWindow::MainWindow()
   m_button_new = new QPushButton("New game", this);
   connect(m_button_new, SIGNAL (clicked()), this, SLOT (buttonNewGame()));
 
-  QTimer *timer = new QTimer(this);
+  timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(updateGameBoard()));
-  timer->start(100);
+  timer->start(5);
+
+  elapse = new QTimer(this);
+  connect(elapse, SIGNAL(timeout()), this, SLOT(updateTimerLabel()));
+  elapse->start(1000);
 
   QPalette pal = palette();
 
@@ -23,14 +27,23 @@ MainWindow::MainWindow()
   myGameBoard->setAutoFillBackground(true);
   myGameBoard->setPalette(pal);
 
+  mScoreLabel = new QLabel(this);
+  mScoreLabel->setText( getScoreLabelText() );
+
+  mTimeElapsed = new QLabel(this);
+
   QGridLayout *mainLayout = new QGridLayout;
 
   mainLayout->addWidget(myGameBoard, 0, 0);
-  mainLayout->addWidget(m_button_new, 1, 0);
+  mainLayout->addWidget(m_button_new, 1, 0,Qt::AlignRight);
+  mainLayout->addWidget(mScoreLabel, 1,0 , Qt::AlignLeft);
+  mainLayout->addWidget(mTimeElapsed, 1, 0, Qt::AlignCenter);
 
   setLayout(mainLayout);
 
   buttonNewGame();
+
+  mCountdown = true;
 
   setWindowTitle(tr("PingPong"));
 
@@ -40,18 +53,81 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-    //delete ui;
+
+}
+
+QString MainWindow::timeElapsed()
+{
+    static int counter = -4;
+
+    if(mCountdown)
+    {
+        mCountdown = false;
+        counter = -4;
+    }
+
+    counter++;
+
+    if(counter > 0)
+    {
+        return QString("%1:%2").arg( counter / 60, 2, 10, QChar('0'))
+                                      .arg(counter % 60, 2, 10, QChar('0'));
+    }
+    else if(counter < 0)
+    {
+        return QString("-%1:%2").arg( 0, 2, 10, QChar('0'))
+                                      .arg(abs(counter), 2, 10, QChar('0'));
+    }
+    else
+    {
+        continueGame();
+    }
+
+    return QString("%1:%2").arg( 0, 2, 10, QChar('0'))
+                                  .arg(0, 2, 10, QChar('0'));
+}
+
+void MainWindow::updateTimerLabel()
+{
+   mTimeElapsed->clear();
+   mTimeElapsed->setText(timeElapsed());
+}
+
+QString MainWindow::getScoreLabelText()
+{
+    QString wScoreText;
+    wScoreText.append( "Score: " );
+    wScoreText.append(QString::number(myGameBoard->getLScore()));
+    wScoreText.append( " : " );
+    wScoreText.append(QString::number(myGameBoard->getRScore()));
+    return wScoreText;
 }
 
 void MainWindow::buttonNewGame()
 {
-    myGameBoard->updateGameBoard();
-    // TODO: modify it to reset()..
+    mCountdown = true;
+    pauseGame();
+    myGameBoard->resetGameBoard();    
+    emit updateGameBoard();
 }
 
 void MainWindow::updateGameBoard()
 {
+    mScoreLabel->clear();
+    mScoreLabel->setText( getScoreLabelText() );
     myGameBoard->updateGameBoard();
+}
+
+void MainWindow::pauseGame()
+{
+    paused = true;
+    timer->stop();
+}
+
+void MainWindow::continueGame()
+{
+    paused = false;
+    timer->start();
 }
 
 void MainWindow::centerAndResize() {
@@ -83,26 +159,34 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     if(!event->isAutoRepeat())
     {
-        std::cout << " Key is pressed: " ;
         if( event->key() == Qt::Key_W )
         {
-            std::cout << "W" << std::endl;
             myGameBoard->mLMovingUp = true;
         }
         if (event->key() == Qt::Key_S)
         {
-            std::cout << "S" << std::endl;
             myGameBoard->mLMovingDo = true;
         }
         if (event->key() == Qt::Key_O)
         {
-            std::cout << "O" << std::endl;
             myGameBoard->mRMovingUp = true;
         }
         if(event->key() == Qt::Key_L)
         {
-            std::cout << "L" << std::endl;
             myGameBoard->mRMovingDo = true;
+        }
+        if(event->key() == Qt::Key_P)
+        {
+            // TODO: catch space instead of P
+            std::cout << "SPACE" << std::endl;
+            if(paused)
+            {
+                continueGame();
+            }
+            else
+            {
+                pauseGame();
+            }
         }
     }
 
@@ -112,28 +196,21 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     if(!event->isAutoRepeat())
     {
-        std::cout << "Key is released: " ;
         if( event->key() == Qt::Key_W )
         {
-            std::cout << "W" << std::endl;
             myGameBoard->mLMovingUp = false;
         }
         if (event->key() == Qt::Key_S)
         {
-            std::cout << "S" << std::endl;
             myGameBoard->mLMovingDo = false;
         }
         if (event->key() == Qt::Key_O)
         {
-            std::cout << "O" << std::endl;
             myGameBoard->mRMovingUp = false;
         }
         if(event->key() == Qt::Key_L)
         {
-            std::cout << "L" << std::endl;
             myGameBoard->mRMovingDo = false;
         }
     }
-
-
 }

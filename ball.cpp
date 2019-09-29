@@ -1,5 +1,6 @@
 #include "ball.h"
 
+
 Ball::Ball()
 {
 
@@ -7,12 +8,12 @@ Ball::Ball()
 
 void Ball::init(QSize iSize, int iBallSize)
 {
-    //TODO: set size of gameboard to handle ball moving
     mGameBoardHeight = iSize.height();
     mGameBoardWidth = iSize.width();
     mBallSize = iBallSize;
     mXDirection = 1;
     mYDirection = -1;
+    mIsBallOut = false;
 
 }
 
@@ -22,20 +23,22 @@ void Ball::setBallPosition(int x, int y)
     mY = y;
 }
 
-void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
+void Ball::updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int &iRScore)
 {    
     int wXCheckpoint = mX + mXDirection + (mBallSize / 2);
     int wYCheckpoint = mY + mYDirection + (mBallSize / 2);
-    int wSpeed = 4;
+    int wBallSpeed = 4;
 
     // check if there is a hit
     if (wXCheckpoint <= (iLeftRack.mX1 + 25) && wYCheckpoint < iLeftRack.mY2 && wYCheckpoint > iLeftRack.mY1)
     {
         mXDirection *= -1;
+        iLScore++;
     }
     else if(wXCheckpoint >= (iRightRack.mX1 - 10) && wYCheckpoint < iRightRack.mY2 && wYCheckpoint > iRightRack.mY1)
     {
         mXDirection *= -1;
+        iRScore++;
     }
 
     // check if ball is at top or bottom
@@ -44,10 +47,14 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack)
         mYDirection *= -1;
     }
 
-    // TODO: Add logic for "new" ball if it went out
+    // check if ball went out
+    if(wXCheckpoint < 0 || wXCheckpoint > mGameBoardWidth)
+    {
+        mIsBallOut = true;
+    }
 
-    mX += (mXDirection * wSpeed);
-    mY += (mYDirection * wSpeed);
+    mX += (mXDirection * wBallSpeed);
+    mY += (mYDirection * wBallSpeed);
 }
 
 void Ball::setBallXDirection(int iXDirection)

@@ -5,6 +5,8 @@
 #include <QWidget>
 #include <QPushButton>
 #include "gameboardwidget.h"
+#include <QLabel>
+#include <QTime>
 
 class GameBoardWidget;
 
@@ -19,9 +21,20 @@ public:
 private:
    GameBoardWidget *myGameBoard;
    QPushButton *m_button_new;
+   QLabel *mScoreLabel;
+   QLabel *mTimeElapsed;
    void centerAndResize();
    const int UP = -4;
    const int DOWN = 4;
+   QString timeElapsed();
+   QString getScoreLabelText();
+   QTime mGameTime;
+   QTimer *timer;
+   QTimer *elapse;
+   void pauseGame();
+   void continueGame();
+   bool paused;
+   bool mCountdown;
 
 protected:
    void keyPressEvent(QKeyEvent *event);
@@ -30,6 +43,8 @@ protected:
 private slots:
     void buttonNewGame();
     void updateGameBoard();
+    void updateTimerLabel();
+
 };
 
 #endif // MAINWINDOW_H
