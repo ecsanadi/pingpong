@@ -29,6 +29,8 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int
     int wYCheckpoint = mY + mYDirection + (mBallSize / 2);
     int wBallSpeed = 4;
 
+    // TODO: Fix hit bug when ball goes under rack or bouncing on it
+
     // check if there is a hit
     if (wXCheckpoint <= (iLeftRack.mX1 + 25) && wYCheckpoint < iLeftRack.mY2 && wYCheckpoint > iLeftRack.mY1)
     {
