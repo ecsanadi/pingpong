@@ -34,6 +34,7 @@ private:
    void pauseGame();
    void continueGame();
    bool paused;
+   bool mCountdown;
 
 protected:
    void keyPressEvent(QKeyEvent *event);

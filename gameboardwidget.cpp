@@ -42,9 +42,6 @@ void GameBoardWidget::setGameSpeed(int iSpeedLevel)
         mRackUpdateSpeed = 1;
 
     }
-
-    // TODO: reset board but not start game without pressing NewGame button
-
 }
 
 void GameBoardWidget::updateGameBoard()
@@ -54,9 +51,8 @@ void GameBoardWidget::updateGameBoard()
 
     if(mBall.getIsBallOut())
     {
-        resetGameBoard();
+        resetBallPosition();
     }
-
 
     ms_current = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
     if(ms_current - ms_last > ms_delta)
@@ -120,6 +116,13 @@ void GameBoardWidget::resetGameBoard()
     update();
 }
 
+
+void GameBoardWidget::resetBallPosition()
+{
+    mBall.init(mSize, mBallSize);
+    mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
+}
+
 void GameBoardWidget::init(QSize iSize)
 {
     if (mSize != iSize)
@@ -139,8 +142,7 @@ void GameBoardWidget::init(QSize iSize)
     mBallSize = 15;
     mGameSpeed = 1;
     setGameSpeed(mGameSpeed);
-    mBall.init(mSize, mBallSize);
-    mBall.setBallPosition(mSize.width() / 2, mSize.height() / 2);
+    resetBallPosition();
 
     mRightRack.mX1 = mSize.width() - mRackPenSize / 2;
     mRightRack.mY1 = 1;

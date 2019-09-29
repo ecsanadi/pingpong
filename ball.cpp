@@ -53,8 +53,6 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int
         mIsBallOut = true;
     }
 
-    // TODO: Add logic for "new" ball if it went out
-
     mX += (mXDirection * wBallSpeed);
     mY += (mYDirection * wBallSpeed);
 }

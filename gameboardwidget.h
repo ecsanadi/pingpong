@@ -32,6 +32,7 @@ public:
 public slots:
     void updateGameBoard();
     void resetGameBoard();
+    void resetBallPosition();
     void leftRackMove(int iDirection);
     void rightRackMove(int iDirection);
     void setGameSpeed(int iSpeedLevel);

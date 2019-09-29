@@ -9,9 +9,6 @@ MainWindow::MainWindow()
 {
   myGameBoard = new GameBoardWidget;
 
-   ///*myGameBoard*/this->setFocusPolicy(Qt::NoFocus);
-
-
   m_button_new = new QPushButton("New game", this);
   connect(m_button_new, SIGNAL (clicked()), this, SLOT (buttonNewGame()));
 
@@ -44,31 +41,50 @@ MainWindow::MainWindow()
 
   setLayout(mainLayout);
 
-  paused = false;
-
   buttonNewGame();
 
-  mGameTime.start();
+  mCountdown = true;
 
   setWindowTitle(tr("PingPong"));
 
   centerAndResize();
 
-
-
 }
 
 MainWindow::~MainWindow()
 {
-    //TODO: check what should be free
+
 }
 
 QString MainWindow::timeElapsed()
 {
+    static int counter = -4;
 
-    return QString("%1:%2").arg( mGameTime.elapsed() / 60000        , 2, 10, QChar('0'))
-                                  .arg((mGameTime.elapsed() % 60000) / 1000, 2, 10, QChar('0'));
+    if(mCountdown)
+    {
+        mCountdown = false;
+        counter = -4;
+    }
 
+    counter++;
+
+    if(counter > 0)
+    {
+        return QString("%1:%2").arg( counter / 60, 2, 10, QChar('0'))
+                                      .arg(counter % 60, 2, 10, QChar('0'));
+    }
+    else if(counter < 0)
+    {
+        return QString("-%1:%2").arg( 0, 2, 10, QChar('0'))
+                                      .arg(abs(counter), 2, 10, QChar('0'));
+    }
+    else
+    {
+        continueGame();
+    }
+
+    return QString("%1:%2").arg( 0, 2, 10, QChar('0'))
+                                  .arg(0, 2, 10, QChar('0'));
 }
 
 void MainWindow::updateTimerLabel()
@@ -89,8 +105,9 @@ QString MainWindow::getScoreLabelText()
 
 void MainWindow::buttonNewGame()
 {
-    myGameBoard->resetGameBoard();
-    mGameTime.start();
+    mCountdown = true;
+    pauseGame();
+    myGameBoard->resetGameBoard();    
     emit updateGameBoard();
 }
 
@@ -103,16 +120,14 @@ void MainWindow::updateGameBoard()
 
 void MainWindow::pauseGame()
 {
+    paused = true;
     timer->stop();
-    elapse->stop();
-
 }
 
 void MainWindow::continueGame()
 {
+    paused = false;
     timer->start();
-    elapse->start();
-
 }
 
 void MainWindow::centerAndResize() {
@@ -144,25 +159,20 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
     if(!event->isAutoRepeat())
     {
-        std::cout << " Key is pressed: " ;
         if( event->key() == Qt::Key_W )
         {
-            std::cout << "W" << std::endl;
             myGameBoard->mLMovingUp = true;
         }
         if (event->key() == Qt::Key_S)
         {
-            std::cout << "S" << std::endl;
             myGameBoard->mLMovingDo = true;
         }
         if (event->key() == Qt::Key_O)
         {
-            std::cout << "O" << std::endl;
             myGameBoard->mRMovingUp = true;
         }
         if(event->key() == Qt::Key_L)
         {
-            std::cout << "L" << std::endl;
             myGameBoard->mRMovingDo = true;
         }
         if(event->key() == Qt::Key_P)
@@ -171,12 +181,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             std::cout << "SPACE" << std::endl;
             if(paused)
             {
-                paused = false;
                 continueGame();
             }
             else
             {
-                paused = true;
                 pauseGame();
             }
         }
@@ -188,28 +196,21 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
 {
     if(!event->isAutoRepeat())
     {
-        std::cout << "Key is released: " ;
         if( event->key() == Qt::Key_W )
         {
-            std::cout << "W" << std::endl;
             myGameBoard->mLMovingUp = false;
         }
         if (event->key() == Qt::Key_S)
         {
-            std::cout << "S" << std::endl;
             myGameBoard->mLMovingDo = false;
         }
         if (event->key() == Qt::Key_O)
         {
-            std::cout << "O" << std::endl;
             myGameBoard->mRMovingUp = false;
         }
         if(event->key() == Qt::Key_L)
         {
-            std::cout << "L" << std::endl;
             myGameBoard->mRMovingDo = false;
         }
     }
-
-
 }
