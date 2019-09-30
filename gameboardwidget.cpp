@@ -145,14 +145,13 @@ void GameBoardWidget::init(QSize iSize)
     setGameSpeed(mGameSpeed);
     resetBallPosition();
 
-    // TODO: start racks from center
     mRightRack.mX1 = mSize.width() - mRackPenSize / 2;
-    mRightRack.mY1 = 1;
+    mRightRack.mY1 = (mSize.height() / 2) - (mRackLength / 2);
     mRightRack.mX2 = mRightRack.mX1;
     mRightRack.mY2 = mRightRack.mY1 + mRackLength;
 
     mLeftRack.mX1 = (mRackPenSize / 2) + 2;
-    mLeftRack.mY1 = 1;
+    mLeftRack.mY1 = mSize.height() / 2 - (mRackLength / 2);
     mLeftRack.mX2 = mLeftRack.mX1;
     mLeftRack.mY2 = mLeftRack.mY1 + mRackLength;
 
