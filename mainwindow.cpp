@@ -135,6 +135,8 @@ void MainWindow::centerAndResize() {
     QSize availableSize = qApp->desktop()->availableGeometry().size();
     int width = availableSize.width();
     int height = availableSize.height();
+
+    // TODO: test window resize than delete qdebug msg
     qDebug() << "Available dimensions " << width << "x" << height;
     width *= 0.6; // 90% of the screen size
     height *= 0.8; // 90% of the screen size

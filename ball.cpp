@@ -25,30 +25,37 @@ void Ball::setBallPosition(int x, int y)
 
 void Ball::updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int &iRScore)
 {    
+    int wBallSpeed = 3;
+
     int wXCheckpoint = mX + mXDirection + (mBallSize / 2);
-    int wYCheckpoint = mY + mYDirection + (mBallSize / 2);
-    int wBallSpeed = 4;
+    int wXLeftCheckpoint = mX + (mXDirection * wBallSpeed)  - (mBallSize / 2);
+    int wYTopCheckpoint = mY + mYDirection - (mBallSize / 2);
+    int wYBottomCheckpoint = mY + mYDirection + (mBallSize / 2);
 
     // check if there is a hit
-    if (wXCheckpoint <= (iLeftRack.mX1 + 25) && wYCheckpoint < iLeftRack.mY2 && wYCheckpoint > iLeftRack.mY1)
+    if (wXLeftCheckpoint <= (iLeftRack.mX1 + 10)
+        && wYTopCheckpoint < iLeftRack.mY2
+        && wYBottomCheckpoint > iLeftRack.mY1)
     {
         mXDirection *= -1;
         iLScore++;
     }
-    else if(wXCheckpoint >= (iRightRack.mX1 - 10) && wYCheckpoint < iRightRack.mY2 && wYCheckpoint > iRightRack.mY1)
+    else if(wXCheckpoint == (iRightRack.mX1 - 10)
+            && wYTopCheckpoint < iRightRack.mY2
+            && wYBottomCheckpoint > iRightRack.mY1)
     {
         mXDirection *= -1;
         iRScore++;
     }
 
     // check if ball is at top or bottom
-    if(wYCheckpoint < 20 || wYCheckpoint > mGameBoardHeight)
+    if(wYTopCheckpoint < 1 || wYBottomCheckpoint > mGameBoardHeight)
     {
         mYDirection *= -1;
     }
 
     // check if ball went out
-    if(wXCheckpoint < 0 || wXCheckpoint > mGameBoardWidth)
+    if(wXLeftCheckpoint < (iLeftRack.mX1 ) || wXCheckpoint > (iRightRack.mX1 - 10))
     {
         mIsBallOut = true;
     }
