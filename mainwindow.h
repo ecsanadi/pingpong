@@ -24,6 +24,7 @@ private:
    QLabel *mScoreLabel;
    QLabel *mTimeElapsed;
    void centerAndResize();
+   void checkWindowSize();
    const int UP = -4;
    const int DOWN = 4;
    QString timeElapsed();
@@ -39,6 +40,7 @@ private:
 protected:
    void keyPressEvent(QKeyEvent *event);
    void keyReleaseEvent(QKeyEvent *event);
+   void resizeEvent(QResizeEvent *event);
 
 private slots:
     void buttonNewGame();

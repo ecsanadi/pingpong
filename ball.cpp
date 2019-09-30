@@ -28,19 +28,19 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int
     int wBallSpeed = 3;
 
     int wXCheckpoint = mX + mXDirection + (mBallSize / 2);
-    int wXLeftCheckpoint = mX + (mXDirection * wBallSpeed)  - (mBallSize / 2);
+    int wXLeftCheckpoint = mX + mXDirection  - (mBallSize / 2);
     int wYTopCheckpoint = mY + mYDirection - (mBallSize / 2);
     int wYBottomCheckpoint = mY + mYDirection + (mBallSize / 2);
 
     // check if there is a hit
-    if (wXLeftCheckpoint <= (iLeftRack.mX1 + 10)
+    if (wXLeftCheckpoint <= (iLeftRack.mX1 + 9)
         && wYTopCheckpoint < iLeftRack.mY2
         && wYBottomCheckpoint > iLeftRack.mY1)
     {
         mXDirection *= -1;
         iLScore++;
     }
-    else if(wXCheckpoint == (iRightRack.mX1 - 10)
+    else if(wXCheckpoint >= (iRightRack.mX1 - 9)
             && wYTopCheckpoint < iRightRack.mY2
             && wYBottomCheckpoint > iRightRack.mY1)
     {
@@ -55,13 +55,13 @@ void Ball::updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int
     }
 
     // check if ball went out
-    if(wXLeftCheckpoint < (iLeftRack.mX1 ) || wXCheckpoint > (iRightRack.mX1 - 10))
+    if(wXLeftCheckpoint < (iLeftRack.mX1 ) || wXCheckpoint > (iRightRack.mX1 - 5))
     {
         mIsBallOut = true;
     }
 
-    mX += (mXDirection * wBallSpeed);
-    mY += (mYDirection * wBallSpeed);
+    mX += mXDirection * wBallSpeed;
+    mY += mYDirection * wBallSpeed;
 }
 
 void Ball::setBallXDirection(int iXDirection)

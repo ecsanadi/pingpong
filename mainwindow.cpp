@@ -136,7 +136,6 @@ void MainWindow::centerAndResize() {
     int width = availableSize.width();
     int height = availableSize.height();
 
-    // TODO: test window resize than delete qdebug msg
     qDebug() << "Available dimensions " << width << "x" << height;
     width *= 0.6; // 90% of the screen size
     height *= 0.8; // 90% of the screen size
@@ -153,6 +152,17 @@ void MainWindow::centerAndResize() {
             qApp->desktop()->availableGeometry()
         )
     );
+}
+
+void MainWindow::checkWindowSize()
+{
+    static QSize size = this->size();
+    QSize newSize = this->size();
+    if (newSize != size)
+    {
+        myGameBoard->init(newSize);
+    }
+
 }
 
 
@@ -215,4 +225,10 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event)
             myGameBoard->mRMovingDo = false;
         }
     }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    checkWindowSize();
+    QWidget::resizeEvent(event);
 }
