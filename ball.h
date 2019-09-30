@@ -12,7 +12,7 @@ public:
     void init(QSize iSize, int iBallSize);
 
     void setBallPosition(int iX, int iY);
-    void updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int &iRScore); //TODO: moving may can be executed from gameboard by adding direction parameters here
+    void updateBallPosition(Line iLeftRack, Line iRightRack, int &iLScore, int &iRScore);
     void setBallXDirection(int iXDirection);
     void setBallYDirection(int iYDirection);
     int getBallXDirection();

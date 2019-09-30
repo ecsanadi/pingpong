@@ -48,6 +48,7 @@ void GameBoardWidget::updateGameBoard()
 {
     static int wRackUpdateCounter = mRackUpdateSpeed;
     static int wBallUpdateCounter = mBallUpdateSpeed;
+    static bool isUpdate = false;
 
     if(mBall.getIsBallOut())
     {
@@ -84,7 +85,7 @@ void GameBoardWidget::updateGameBoard()
             mRightRack.mY1 += mRackSpeed;
             mRightRack.mY2 = mRightRack.mY1 + mRackLength;
         }
-        mIsUpdate = true;
+        isUpdate = true;
     }
     else
     {
@@ -95,16 +96,16 @@ void GameBoardWidget::updateGameBoard()
     {
         wBallUpdateCounter = mBallUpdateSpeed;
         mBall.updateBallPosition(mLeftRack,mRightRack, mLScore, mRScore);
-        mIsUpdate = true;
+        isUpdate = true;
     }
     else
     {
         wBallUpdateCounter--;
     }
 
-    if(mIsUpdate)
+    if(isUpdate)
     {
-        mIsUpdate = false;
+        isUpdate = false;
         update();
     }
 
@@ -144,6 +145,7 @@ void GameBoardWidget::init(QSize iSize)
     setGameSpeed(mGameSpeed);
     resetBallPosition();
 
+    // TODO: start racks from center
     mRightRack.mX1 = mSize.width() - mRackPenSize / 2;
     mRightRack.mY1 = 1;
     mRightRack.mX2 = mRightRack.mX1;
@@ -190,6 +192,8 @@ void GameBoardWidget::paintEvent(QPaintEvent */*event*/)
      painter.save();
 
      checkPositions();
+
+     // TODO: consider one player mode selection and paint a wall instead of one rack
 
      painter.setPen(QPen(static_cast<QColor>(Qt::white), mRackPenSize/3, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin));
      painter.drawLine(mCenterLine.mX1, mCenterLine.mY1, mCenterLine.mX2, mCenterLine.mY2);

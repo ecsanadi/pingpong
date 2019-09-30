@@ -14,7 +14,7 @@ class GameBoardWidget : public QWidget
 {
 public:
     GameBoardWidget(QWidget *parent = 0) :
-        QWidget(parent)
+        QWidget(parent), mLScore(0),mRScore(0)
     {
 
     }
@@ -51,7 +51,6 @@ private:
     int mRackSpeed;
     void checkPositions();
     int mBallSize;
-    bool mIsUpdate;
     int mBallUpdateSpeed;
     int mRackUpdateSpeed;
     int mGameSpeed;
