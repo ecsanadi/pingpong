@@ -16,7 +16,7 @@ public:
     GameBoardWidget(QWidget *parent = 0) :
         QWidget(parent), mLScore(0),mRScore(0)
     {
-
+        init(this->size());
     }
 
     ~GameBoardWidget();

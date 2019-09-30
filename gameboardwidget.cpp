@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <iostream>
 #include <unistd.h>
+#include <QDebug>
 
 GameBoardWidget::~GameBoardWidget()
 {
@@ -132,6 +133,7 @@ void GameBoardWidget::init(QSize iSize)
         mSize.setHeight(mSize.height() - 60);
         mSize.setWidth(mSize.width()-25);
     }
+
     ms_current = duration_cast< milliseconds >(system_clock::now().time_since_epoch());
     ms_last = ms_current;
     ms_delta = std::chrono::milliseconds(60000);
