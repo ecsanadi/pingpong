@@ -7,6 +7,7 @@
 #include "gameboardwidget.h"
 #include <QLabel>
 #include <QTime>
+#include <QLayout>
 
 class GameBoardWidget;
 
@@ -32,6 +33,7 @@ private:
    QTime mGameTime;
    QTimer *timer;
    QTimer *elapse;
+   QGridLayout *mainLayout;
    void pauseGame();
    void continueGame();
    bool paused;

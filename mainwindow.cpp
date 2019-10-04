@@ -32,7 +32,7 @@ MainWindow::MainWindow()
 
   mTimeElapsed = new QLabel(this);
 
-  QGridLayout *mainLayout = new QGridLayout;
+  mainLayout = new QGridLayout;
 
   mainLayout->addWidget(myGameBoard, 0, 0);
   mainLayout->addWidget(m_button_new, 1, 0,Qt::AlignRight);
@@ -53,7 +53,13 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-
+    delete myGameBoard;
+    delete m_button_new;
+    delete timer;
+    delete elapse;
+    delete mScoreLabel;
+    delete mTimeElapsed;
+    delete mainLayout;
 }
 
 QString MainWindow::timeElapsed()
@@ -201,7 +207,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             }
         }
     }
-
 }
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event)
@@ -231,4 +236,5 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     checkWindowSize();
     QWidget::resizeEvent(event);
+
 }
